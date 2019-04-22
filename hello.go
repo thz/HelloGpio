@@ -97,9 +97,21 @@ func Ampel() {
 	}
 }
 
+func roll() {
+	if err := apicall("/example/uri", API_VAL_UP); err != nil {
+		panic(err)
+	}
+	time.Sleep(2 * time.Second)
+	if err := apicall("/example/uri", API_VAL_STOP); err != nil {
+		panic(err)
+	}
+}
+
 func main() {
 	host.Init()
 	prepare()
+
+	roll()
 
 	go Ampel()
 
