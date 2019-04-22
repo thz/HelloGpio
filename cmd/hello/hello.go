@@ -7,24 +7,13 @@ import (
 	"syscall"
 	"time"
 
+	hello_api "HelloGpio/lib/api"
+	hello_gpio "HelloGpio/lib/gpio"
+
 	"periph.io/x/periph/conn/gpio"
 	"periph.io/x/periph/conn/gpio/gpioreg"
 	"periph.io/x/periph/host"
 )
-
-// WaitPin waits for edge on a pin, calls the callback, and waits a bit to prevent chatter.
-func WaitPin(pinName string, callback func()) {
-	pin := gpioreg.ByName(pinName)
-	pin.In(gpio.PullUp, gpio.BothEdges)
-	for {
-		pin.WaitForEdge(-1)
-		val := pin.Read()
-		if val == gpio.Low {
-			callback()
-		}
-		time.Sleep(200 * time.Millisecond)
-	}
-}
 
 // #########################################################33
 
@@ -98,11 +87,11 @@ func Ampel() {
 }
 
 func roll() {
-	if err := apicall("/example/uri", API_VAL_UP); err != nil {
+	if err := hello_api.Apicall("/example/uri", hello_api.API_VAL_UP); err != nil {
 		panic(err)
 	}
 	time.Sleep(2 * time.Second)
-	if err := apicall("/example/uri", API_VAL_STOP); err != nil {
+	if err := hello_api.Apicall("/example/uri", hello_api.API_VAL_STOP); err != nil {
 		panic(err)
 	}
 }
@@ -115,5 +104,5 @@ func main() {
 
 	go Ampel()
 
-	WaitPin("GPIO5", Hello)
+	hello_gpio.WaitPin("GPIO5", Hello)
 }

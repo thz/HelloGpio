@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"bytes"
@@ -11,7 +11,7 @@ const (
 	API_VAL_STOP = "1"
 )
 
-func apicall(uri string, data string) error {
+func Apicall(uri string, data string) error {
 
 	// data goes into request body
 	buf := bytes.NewBuffer([]byte(data))
